@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<head>
+</head>
+
+<body>
+    <input type="button" value="Get All Task" onclick="getalltask()">
+    <div id="tasks">
+
+    </div>
+     
+    <script>
+        function getalltask(){
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function(){
+                var titels=this.responseText.split("?");
+                document.getElementById("tasks").innerHTML="";
+                titels.forEach(element => {
+                    document.getElementById("tasks").innerHTML += 
+                    "<div id="+element.replace(/ /g,"")+" ><h3>"+element+"</h3>"+
+                    "<input type='button' value='gettask' onclick='gettask(\""+element+"\")'><br></div>";
+                });
+            }
+            xhttp.open("GET", "vid/data.txt");
+            xhttp.send();
+        }
+        
+        function gettask(id){
+            const xhttp = new XMLHttpRequest();
+            let res=null;
+            xhttp.onload = function() {
+                var num = parseInt(this.responseText);
+                for(let i=1; i<=num;i++){
+                    res = id.replace(/ /g, "%20");
+                    document.getElementById(id.replace(/ /g,"")).innerHTML +=
+                    makevid("vid/"+res,i);
+                }
+            }
+            res = id.replace(/ /g, "%20");
+            xhttp.open("GET", "vid/"+res+"/data.txt");
+            xhttp.send();   
+        }
+        
+        function makevid(path,num){
+            var x=path+"/"+num.toString()+".mp4";
+            var data=null;
+            const text=null;
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function(){
+                return this.responseText;
+            }
+            xhttp.open("GET",path+"/"+num.toString()+".json");
+            xhttp.send();
+            console.log(text);
+            return "<video width='320' height='240' controls>"+
+                    "<source src=\""+x+"\" type='video/mp4'>"+
+                    "</video><br><h4>"+text+"</h4>";
+        }
+
+    </script>   
+</body>
+     
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+    <form id="form">
+    <label> id video</label><input type="text" name="idvid" id="vidid" >
+    </form>
+    <input type="button" value="send" onclick="send()" >
+    <script>
+        function send(){
+            var xhr=new XMLHttpRequest();
+            xhr.onload=function(e){
+            if(this.readyState === 4){
+                console.log("Server returned: ",e.target.responseText);
+            }
+            };
+            var fd = new FormData();
+            var vidid = document.getElementById("vidid").value;
+            fd.append('idvid',vidid);
+            xhr.open("POST","http://127.0.0.1:8000/savevid",true);
+            xhr.send(fd)
+        }
+
+    </script>  
+</body>
+</html>
